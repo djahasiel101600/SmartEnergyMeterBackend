@@ -37,8 +37,8 @@ services:
     env: postgresql
     region: singapore
     plan: free
-    database: smart_energy
-    user: smart_energy_user
+    databaseName: smart_energy
+    databaseUser: smart_energy_user
 
   # Redis Service
   - type: redis
