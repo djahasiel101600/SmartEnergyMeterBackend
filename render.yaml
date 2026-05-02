@@ -31,18 +31,17 @@ services:
       - key: PYTHON_VERSION
         value: 3.11
 
-  # PostgreSQL Database
-  - type: pserv
-    name: smart-energy-db
-    env: postgresql
-    region: singapore
-    plan: free
-    databaseName: smart_energy
-    databaseUser: smart_energy_user
-
   # Redis Service
   - type: redis
     name: smart-energy-redis
     region: singapore
     plan: free
     maxmemoryPolicy: allkeys-lru
+
+databases:
+  # PostgreSQL Database
+  - name: smart-energy-db
+    region: singapore
+    plan: free
+    databaseName: smart_energy
+    user: smart_energy_user
