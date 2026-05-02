@@ -1,0 +1,48 @@
+services:
+  # Backend Web Service
+  - type: web
+    name: smart-energy-backend
+    env: python
+    region: singapore
+    plan: free
+    buildCommand: "./build.sh"
+    startCommand: "daphne -b 0.0.0.0 -p 10000 backend.asgi:application"
+    healthCheckPath: /api/devices/statistics_all/
+    envVars:
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DEBUG
+        value: false
+      - key: ALLOWED_HOSTS
+        value: "*"
+      - key: DATABASE_URL
+        fromDatabase:
+          name: smart-energy-db
+          property: connectionString
+      - key: REDIS_URL
+        fromService:
+          type: redis
+          name: smart-energy-redis
+          property: connectionString
+      - key: CORS_ALLOWED_ORIGINS
+        sync: false
+      - key: TIME_ZONE
+        value: Asia/Manila
+      - key: PYTHON_VERSION
+        value: 3.11
+
+  # PostgreSQL Database
+  - type: pserv
+    name: smart-energy-db
+    env: postgresql
+    region: singapore
+    plan: free
+    database: smart_energy
+    user: smart_energy_user
+
+  # Redis Service
+  - type: redis
+    name: smart-energy-redis
+    region: singapore
+    plan: free
+    maxmemoryPolicy: allkeys-lru
